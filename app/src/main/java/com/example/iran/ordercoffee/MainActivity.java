@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.text.NumberFormat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,14 +37,24 @@ public class MainActivity extends AppCompatActivity {
         EditText mocha = findViewById(R.id.mocha);
 
 
-        int a = Integer.parseInt(americano.getText().toString());
-        int c = Integer.parseInt(capuccino.getText().toString());
-        int l = Integer.parseInt(latte.getText().toString());
-        int m = Integer.parseInt(mocha.getText().toString());
+        int a = Integer.parseInt(tryParse(americano));
+        int c = Integer.parseInt(tryParse(capuccino));
+        int l = Integer.parseInt(tryParse(latte));
+        int m = Integer.parseInt(tryParse(mocha));
 
         price += americanoprice * a + cappuccinoprice * c + latteprice * l + mochaprice * m;
 
         return price;
+    }
+
+
+    public static String tryParse(EditText editText) {
+
+        if (!TextUtils.isEmpty(editText.getText().toString())) {
+            return editText.getText().toString();
+        } else {
+            return "0";
+        }
     }
 
     public String display() {
@@ -55,19 +68,29 @@ public class MainActivity extends AppCompatActivity {
         CheckBox milk = findViewById(R.id.milk);
         CheckBox sugar = findViewById(R.id.sugar);
 
+
         String summaryy = "";
 
-        summaryy += "Name: " + name.getText().toString() + "\n";
-        summaryy += "Email Address: " + email.getText().toString() + "\n";
-        summaryy += "americano: " + americano.getText().toString() + "\n";
-        summaryy += "capuccino: " + capuccino.getText().toString() + "\n";
-        summaryy += "latte: " + latte.getText().toString() + "\n";
-        summaryy += "mocha: " + mocha.getText().toString() + "\n";
-        summaryy += "milk : " + milk.isChecked() + "\n";
-        summaryy += "sugar : " + sugar.isChecked() + "\n";
-        summaryy += "price= " + Calculate() + "$" + "\n";
+        if (!TextUtils.isEmpty(name.getText().toString()) && !TextUtils.isEmpty(email.getText().toString())) {
 
-        return summaryy;
+            summaryy += "Name: " + name.getText().toString() + "\n";
+            summaryy += "Email Address: " + email.getText().toString() + "\n";
+            summaryy += "americano: " + americano.getText().toString() + "\n";
+            summaryy += "capuccino: " + capuccino.getText().toString() + "\n";
+            summaryy += "latte: " + latte.getText().toString() + "\n";
+            summaryy += "mocha: " + mocha.getText().toString() + "\n";
+            summaryy += "milk : " + milk.isChecked() + "\n";
+            summaryy += "sugar : " + sugar.isChecked() + "\n";
+            summaryy += "price= " + Calculate() + "$" + "\n";
+
+            return summaryy;
+
+        } else if (TextUtils.isEmpty(name.getText().toString())) {
+            return "enter your name";
+        } else if (TextUtils.isEmpty(email.getText().toString())) {
+            return "enter your email";
+        }
+        return null;
     }
 
 
